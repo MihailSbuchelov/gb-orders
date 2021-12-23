@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.order.dao.OrdersDao;
+import ru.gb.order.entity.Orders;
 import ru.gb.order.model.OrdersDto;
 import ru.gb.order.model.mapper.OrdersMapper;
 
@@ -23,7 +24,11 @@ public class OrdersController {
     @GetMapping
     @Transactional
     public List<OrdersDto> getOrders() {
-//        return ordersMapper.toOrdersDto(ordersDao.findById(1L).get());
         return ordersDao.findAll().stream().map(p -> ordersMapper.toOrdersDto(p)).collect(Collectors.toList());
+    }
+
+    @PostMapping("/create")
+    public Orders create(@RequestBody Orders order) {
+        return ordersDao.save(order);
     }
 }
